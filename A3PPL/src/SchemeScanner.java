@@ -53,13 +53,42 @@ public class SchemeScanner {
 	}
 	
 	
-	public static ArrayList<String> schemeScanner(String input){
-		ArrayList <String> tokens;
-		
+	public static ArrayList <ArrayList<String>> schemeScanner(String input){
+		ArrayList <ArrayList<String>> tokens = new ArrayList <ArrayList <String>>();
+		boolean moreChars = true;
+		int currChar = 0;
+		while(moreChars){
+			String currentInput = new String(input.substring(currChar));
+			String workableInput = new String(rmInitWhiteSpace(currentInput));
+			if(currChar != workableInput.length()-1){moreChars = false;}
+			
+			else{
+				tokens.add(findNextToken(workableInput));
+				if(tokens.get(tokens.size()-1).get(0)=="ERROR"){
+					System.out.println("ERROR AT LINE : "+tokens.get(tokens.size()-1).get(1));
+					for(int k = 0; k< tokens.size()-2; k++){
+						tokens.remove(k);
+					}
+					break;
+				}
+				
+			}
+			
+		}
 		
 		return tokens; 
 	}
-
+	
+	public static ArrayList<String> findNextToken(String s){
+		ArrayList <String> token;
+		
+		return token;
+	}
+	
+	public static String rmInitWhiteSpace(String stringWithInitWhiteSpace){
+		String stringWithNoInitWhiteSpace = stringWithInitWhiteSpace.trim();
+		return stringWithNoInitWhiteSpace;
+	}
 	
 	public static void printTokenStream(ArrayList <ArrayList <String>> tokenStream){
 		for(int i = 0; i < tokenStream.size(); i++){
