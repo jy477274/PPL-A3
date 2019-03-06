@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class SchemeScanner {
-
+	public static int currChar = 0;
 	public static void main(String[] args) {
 
 		String input = "(define (fibonacci n)\n\t(let fib ([prev 0]\n\t\t\t[cur 1]\n\t\t\t[i 0])\n\t\t(if (= i n)\n\t\t\tcur\n\t\t\t(fib cur (+ prev cur) (+ i 1)))))";
@@ -81,6 +81,23 @@ public class SchemeScanner {
 	
 	public static ArrayList<String> findNextToken(String s){
 		ArrayList <String> token;
+		boolean seenToken = false;
+		if(s.charAt(currChar)=='('){token.add("OPENRD"); 	token.add(Integer.toString(currLine)+": "+Integer.toString(currPos));}
+		else if(s.charAt(currChar)==')'){token.add("CLOSEDRD");	token.add(Integer.toString(currLine)+": "+Integer.toString(currPos));}
+		else if(s.charAt(currChar)=='['){token.add("OPENSQ");	token.add(Integer.toString(currLine)+": "+Integer.toString(currPos));}
+		else if(s.charAt(currChar)==']'){token.add("CLOSEDSQ");	token.add(Integer.toString(currLine)+": "+Integer.toString(currPos));}
+		else if(s.charAt(currChar)=='{'){token.add("OPENCU");	token.add(Integer.toString(currLine)+": "+Integer.toString(currPos));}
+		else if(s.charAt(currChar)=='}'){token.add("CLOSEDSQ");	token.add(Integer.toString(currLine)+": "+Integer.toString(currPos));}
+		
+		else if(s.charAt(currChar)=='#'){
+			if(s.charAt(currChar+1)=='t' || s.charAt(currChar+1)=='f'){token.add("BOOL");	token.add(Integer.toString(currLine)+": "+Integer.toString(currPos));}
+			else if(s.charAt(currChar+1)=='#' && s.charAt(currChar+2)=='\\' && s.charAt(currChar+2)=='\\'){
+				
+			}
+		}
+		
+		
+		
 		
 		return token;
 	}
