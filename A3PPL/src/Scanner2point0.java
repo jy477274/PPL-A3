@@ -81,56 +81,96 @@ public class Scanner2point0 {
 	}
 	
 	public static String identToken(String s){
-		String tokenType = null;
-		switch(s.charAt(0)){
-		case '+':
-			tokenType = numberToken();
-			break;
-		case '-':
-			tokenType = numberToken();
-			break;
-		case '0':
-			tokenType = numberToken();
-			break;
-		case '1':
-			tokenType = numberToken();
-			break;
-		case '2':
-			tokenType = numberToken();
-			break;
-		case '3':
-			tokenType = numberToken();
-			break;
-		case '4':
-			tokenType = numberToken();
-			break;
-		case '5':
-			tokenType = numberToken();
-			break;
-		case '6':
-			tokenType = numberToken();
-			break;
-		case '7':
-			tokenType = numberToken();
-			break;
-		case '8':
-			tokenType = numberToken();
-			break;
-		case '9':
-			tokenType = numberToken();
-			break;
-		case '#':
-			if(s.charAt(1) =='t' || s.charAt(1) =='f')
-				tokenType = boolToken(s);
-			else
-				tokenType = charToken(s);
-			break;
+		switch(s){
+		case "lambda" :
+			return "lambda";
+		case "define" :
+			return "define";
+		case "let" :
+			return "let";
+		case "cond" :
+			return "cond";
+		case "if" :
+			return "if";
+		case "begin" :
+			return "begin";
+		case "quote" :
+			return "quote";
 		default :
 			break;
 		}
 		
+		if((s.charAt(0) != ('[')) &&
+				(s.charAt(0) != (']')) &&
+				(s.charAt(0) != ('(')) &&
+				(s.charAt(0) != (')')) &&
+				(s.charAt(0) != ('{')) &&
+				(s.charAt(0) != ('}')) &&
+				(s.charAt(0) != ('0')) &&
+				(s.charAt(0) != ('1')) &&
+				(s.charAt(0) != ('2')) &&
+				(s.charAt(0) != ('3')) &&
+				(s.charAt(0) != ('4')) &&
+				(s.charAt(0) != ('5')) &&
+				(s.charAt(0) != ('6')) &&
+				(s.charAt(0) != ('7')) &&
+				(s.charAt(0) != ('8')) &&
+				(s.charAt(0) != ('9')) &&
+				(s.charAt(0) != ('+')) &&
+				(s.charAt(0) != ('-')) &&
+				(s.charAt(0) != (';')) &&
+				(s.charAt(0) != ('\''))){
+			for(int i = 1; i < s.length(); i++){
+				if((s.charAt(i) == ('[')) ||
+						(s.charAt(i) != (']')) ||
+						(s.charAt(i) != ('(')) ||
+						(s.charAt(i) != (')')) ||
+						(s.charAt(i) != ('{')) ||
+						(s.charAt(i) != ('}')) ||
+						(s.charAt(i) != (';')) ||
+						(s.charAt(i) != ('\''))){
+					return "ERROR";
+				}
+			}
+			return "IDENTIFIER";
+		}
+		else if((s.length() == 1) && (s.charAt(0) == '\''))
+			return "QUOTMK";
 		
-		return tokenType;
+		switch(s.charAt(0)){
+		case '+' :
+			return numberToken();
+		case '-' :
+			return numberToken();
+		case '0' :
+			return numberToken();
+		case '1' :
+			return numberToken();
+		case '2' :
+			return numberToken();
+		case '3' :
+			return numberToken();
+		case '4' :
+			return numberToken();
+		case '5' :
+			return numberToken();
+		case '6' :
+			return numberToken();
+		case '7' :
+			return numberToken();
+		case '8' :
+			return numberToken();
+
+		case '9' :
+			return numberToken();
+		case '#' :
+			if(s.charAt(1) =='t' || s.charAt(1) =='f')
+				return boolToken(s);
+			else
+				return charToken(s);
+		default :
+			return "ERROR";
+		}
 	}
 	
 	private static String charToken(String s) {
@@ -156,9 +196,15 @@ public class Scanner2point0 {
 		
 		switch(s.charAt(1)) {
 		case 't' :
-			return "BOOL";
+			if(s.length() == 2)
+				return "BOOL";
+			else
+				return "ERROR";
 		case 'f' :
-			return "BOOL";
+			if(s.length() == 2)
+				return "BOOL";
+			else
+				return "ERROR";
 		default :
 			return "ERROR";
 		}
