@@ -44,15 +44,14 @@ public class Scanner2point0 {
 						continue;
 					else{
 						indentToken(toke);
-						toke
-						
+						Arrays.fill(toke, '\0');
 					}
 						
 						
 				}else if(input.get(line).charAt(currCharacter) == '\t'){
 					
 				}else{
-					
+					identToken(toke);
 				}
 			}
 		}	
@@ -61,12 +60,71 @@ public class Scanner2point0 {
 	
 	public static String identToken(char [] c){
 		String tokenType = null;
-		
+		switch(c[0]){
+		case '+':
+			tokenType = numberToken();
+		case '-':
+			tokenType = numberToken();
+		case '0':
+			tokenType = numberToken();
+		case '1':
+			tokenType = numberToken();
+		case '2':
+			tokenType = numberToken();
+		case '3':
+			tokenType = numberToken();
+		case '4':
+			tokenType = numberToken();
+		case '5':
+			tokenType = numberToken();
+		case '6':
+			tokenType = numberToken();
+		case '7':
+			tokenType = numberToken();
+		case '8':
+			tokenType = numberToken();
+		case '9':
+			tokenType = numberToken();
+		case '#':
+			if(c[1] =='t' || c[1] =='f')
+				tokenType = boolToken(c);
+			else
+				tokenType = charToken(c);
+		}
 		
 		
 		return tokenType;
 	}
 	
+	private static String charToken(char[] c) {
+		if(Arrays.equals(c, new char [] {'#','\\','\\','n','e','w','l','i','n','e'})){
+			
+		}else if(Arrays.equals(c, new char [] {'#','\\','\\','s','p','a','c','e'})){
+			
+		}else if(Arrays.equals(c, new char [] {'#','\\','\\','t','a','b'})){
+		}else if(ANY CHAR){
+			
+		}
+		else if(ANY CHAR ident by 3 dig octal){
+			
+		}
+		return null;
+	}
+
+	private static String boolToken(char [] c) {
+		if(c[1] =='t')
+			return "BOOL";
+		else if(c[1] =='f')
+			return "BOOL";
+		else
+			return "ERROR";
+	}
+
+	public static String numberToken() {
+		
+		return null;
+	}
+
 	public static String parenthCall(char c){
 		if( c ==  '(')
 			return "OPENRD";
