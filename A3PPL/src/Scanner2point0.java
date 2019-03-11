@@ -11,8 +11,8 @@ public class Scanner2point0 {
 			String line = sc.nextLine();
 			linedArray.add(line);
 		}
-
-		
+		ArrayList <ArrayList<String>> results = makeTokens(linedArray);
+		results.toString();
 	
 	}
 	
@@ -181,6 +181,7 @@ public class Scanner2point0 {
 		default :
 			return "ERROR";
 		}
+		
 	}
   
 	private static String boolToken(String s) {
@@ -202,16 +203,16 @@ public class Scanner2point0 {
 	}
 
 	public static String numberToken(String s) {
-		s.toLowerCase();
 		if(s.startsWith("0b")){
-			if(!isBi(s.substring(2, s.length())))
-				return "ERROR";
+			if(isBi(s.substring(2, s.length())))
+				return "NUMBER";
 		
 		}else if(s.startsWith("0x")){
-			if(!isHex(s.substring(2, s.length())))
-				return "ERROR";
+			if(isHex(s.substring(2, s.length())))
+				return "NUMBER";
 		
 		}else if(s.charAt(0) == '+' || s.charAt(0) == '-' || isNum(s.substring(0,1))){
+			s.toLowerCase();
 			if(s.charAt(0) != '+' && s.charAt(0) != '-'){
 				if(isNum(s))// if s is a decimal signed integer we know it is a number
 					return "NUMBER";
@@ -237,24 +238,44 @@ public class Scanner2point0 {
 	
 	private static boolean isFloatNoPoint(String s) {//we know that s must have [0-9]+[e(we use tolowercase)][+-]?[0-9}
 		int eValue = s.indexOf('e');
-		if(isNum(s.substring(0, s.charAt(eValue)))){
-			if(s.charAt(eValue+1) == '+' || s.charAt(eValue+1) == '+'){
-				
-			}else{
-				
-			}
-			
+		if(eValue == -1)
+			return false;
+		if(isNum(s.substring(0, s.charAt(eValue))) && isExponent(s.substring((eValue), s.length()))){
+			return true;
 		}
 		
 		return false;
 	}
 
-	public static boolean isFloatPoint(String s) {
-		boolean pointFlag = false;
-		int pointValue = s.indexOf('.') ,count = 0;
-		if(isNum((String) s.subSequence(0, pointValue))){
-			
+	private static boolean isExponent(String s) {
+		if(s.charAt(0) == 'e'){
+			if((s.charAt(1) == '+' || s.charAt(1) == '-')){
+				if(isNum(s.substring(2)));
+					return true;
+			}else{
+				if(isNum(s.substring(1)))
+					return true;
+			}
 		}
+		return false;
+	}
+
+	public static boolean isFloatPoint(String s) {
+		int pValue = s.indexOf('.');
+		int eValue = s.indexOf('e');
+		if(pValue == -1)
+			return false;
+		if(pValue == 0 || isNum(s.substring(0, pValue))){
+			if(eValue != -1){
+				if(isNum(s.substring(pValue + 1, eValue)) && isExponent(s.substring(eValue))){
+					return true;
+				}
+			}else if(isNum(s.substring(pValue + 1))){
+				return true;
+			}
+		}
+			
+			
 		return false;
 	}
 
