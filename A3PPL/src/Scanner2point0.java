@@ -11,9 +11,10 @@ public class Scanner2point0 {
 			String line = sc.nextLine();
 			linedArray.add(line);
 		}
+
 		ArrayList <ArrayList<String>> results = makeTokens(linedArray);
 		results.toString();
-	
+
 	}
 	
 	public static ArrayList <ArrayList<String>> makeTokens(ArrayList<String> input){
@@ -24,6 +25,8 @@ public class Scanner2point0 {
 			int tokeCount = 0;
 			int posiCharacter = 1;
 			for(int currCharacter = 0; currCharacter < input.get(line).length(); posiCharacter++, currCharacter++){
+				
+				
 				if( input.get(line).charAt(currCharacter) ==  '(' ||
 					input.get(line).charAt(currCharacter) ==  ')' ||
 					input.get(line).charAt(currCharacter) ==  '[' ||
@@ -38,7 +41,8 @@ public class Scanner2point0 {
 						
 						tempToken.add(identToken(token));
 						tempToken.add(Integer.toString(line));
-						tempToken.add(Integer.toString(posiCharacter));
+						tempToken.add(Integer.toString(posiCharacter - token.length()));
+						tokens.add(tempToken);
 						tempToken.clear();
 					}
 					
@@ -49,7 +53,28 @@ public class Scanner2point0 {
 					tempToken.clear();
 				}
 				else if(input.get(line).charAt(currCharacter) == '"'){
-					//TODO 
+					int[] stringEnd = stringToken(line, currCharacter, posiCharacter, input);
+					
+					if (stringEnd[0] == 1) {
+						tempToken.add("STRING");
+						tempToken.add(Integer.toString(line));
+						tempToken.add(Integer.toString(posiCharacter));
+						tokens.add(tempToken);
+						tempToken.clear();
+						
+						line = stringEnd[1];
+						currCharacter = stringEnd[2];
+						posiCharacter = stringEnd[3];
+						
+						continue;
+					}
+					else {
+						tempToken.add("ERROR");
+						tempToken.add(Integer.toString(line));
+						tempToken.add(Integer.toString(posiCharacter));
+						tokens.add(tempToken);
+						tempToken.clear();
+					}
 				}
 				else if(input.get(line).charAt(currCharacter) == ' ' ){
 					if (toke[0] == '\0')
@@ -61,7 +86,8 @@ public class Scanner2point0 {
             
 						tempToken.add(identToken(token));
 						tempToken.add(Integer.toString(line));
-						tempToken.add(Integer.toString(posiCharacter));
+						tempToken.add(Integer.toString(posiCharacter - token.length()));
+						tokens.add(tempToken);
 						tempToken.clear();
 					}	
 				}
@@ -75,15 +101,20 @@ public class Scanner2point0 {
 						
 						tempToken.add(identToken(token));
 						tempToken.add(Integer.toString(line));
-						tempToken.add(Integer.toString(posiCharacter));
+						tempToken.add(Integer.toString(posiCharacter - token.length()));
+						tokens.add(tempToken);
 						tempToken.clear();
 						posiCharacter += 4;
-						
-						// TALK ABOUT POSICHARACTER
 					}
+				}
+				else if(input.get(line).charAt(currCharacter) == ';') {
+					break;
+					
+						
 				}
 				else{
 					toke[tokeCount] = input.get(line).charAt(currCharacter);
+					tokeCount++;
 				}
 			}
 		}	
@@ -317,6 +348,7 @@ public class Scanner2point0 {
 		}		
 		return true;		
 	}
+	
 	public static Boolean isNum(String s){
 		for(int i = 0; i < s.length(); i++){
 			if(s.charAt(i) != '0' &&
@@ -377,6 +409,91 @@ public class Scanner2point0 {
 		}
 		
 	}
+	
+	public static int[] stringToken(int line, int currCharacter, int posiCharacter, ArrayList<String> input) {
+		
+		int[] stringEnd = new int[4];
+		currCharacter++;
+		posiCharacter++;
+		
+		for(; line < input.size(); line++) {	
+			for(;currCharacter < input.get(line).length(); currCharacter++)
+			{
+				if (input.get(line).charAt(currCharacter) == '"')
+				{
+					stringEnd[0] = 1;
+					stringEnd[1] = line;
+					stringEnd[2] = currCharacter;
+					stringEnd[3] = posiCharacter;
+					return stringEnd;
+				}
+			
+				if (input.get(line).charAt(currCharacter) == '\"')
+				{
+					stringEnd[0] = 0; // ERROR CODE
+					stringEnd[1] = 0; // LINE
+					stringEnd[2] = 0; // currCharacter
+					stringEnd[3] = 0; // posiCharacter
+					return stringEnd;
+				}
+				else if (input.get(line).charAt(currCharacter) == '\\')
+					if (! (input.get(line).length() < (currCharacter + 1)))
+					{
+						stringEnd[0] = 0;
+						stringEnd[1] = 0;
+						stringEnd[2] = 0;
+						stringEnd[3] = 0;
+						return stringEnd;
+					}
+					else if (!(input.get(line).charAt(currCharacter + 1) == 't') ||
+							!(input.get(line).charAt(currCharacter + 1) == 'n'))
+						if (! (input.get(line).length() < (currCharacter + 3)))
+						{
+							stringEnd[0] = 0;
+							stringEnd[1] = 0;
+							stringEnd[2] = 0;
+							stringEnd[3] = 0;
+							return stringEnd;
+						}
+						else if (! (((input.get(line).charAt(currCharacter + 1) == '0') ||
+								(input.get(line).charAt(currCharacter + 1) == '1') ||
+								(input.get(line).charAt(currCharacter + 1) == '2') ||
+								(input.get(line).charAt(currCharacter + 1) == '3')) &&
+								((input.get(line).charAt(currCharacter + 2) == 't') ||
+										(input.get(line).charAt(currCharacter + 2) == 't') ||
+										(input.get(line).charAt(currCharacter + 2) == 't') ||
+										(input.get(line).charAt(currCharacter + 2) == 't') ||
+										(input.get(line).charAt(currCharacter + 2) == 't') ||
+										(input.get(line).charAt(currCharacter + 2) == 't') ||
+										(input.get(line).charAt(currCharacter + 2) == 't') ||
+										(input.get(line).charAt(currCharacter + 2) == 't')) &&
+								((input.get(line).charAt(currCharacter + 3) == 't') ||
+										(input.get(line).charAt(currCharacter + 3) == 't') ||
+										(input.get(line).charAt(currCharacter + 3) == 't') ||
+										(input.get(line).charAt(currCharacter + 3) == 't') ||
+										(input.get(line).charAt(currCharacter + 3) == 't') ||
+										(input.get(line).charAt(currCharacter + 3) == 't') ||
+										(input.get(line).charAt(currCharacter + 3) == 't') ||
+										(input.get(line).charAt(currCharacter + 3) == 't') ||
+										(input.get(line).charAt(currCharacter + 3) == 't'))))
+						{
+							stringEnd[0] = 0;
+							stringEnd[1] = 0;
+							stringEnd[2] = 0;
+							stringEnd[3] = 0;
+							return stringEnd;
+						}
+			}
+		}
+		
+		stringEnd[0] = 0;
+		stringEnd[1] = 0;
+		stringEnd[2] = 0;
+		stringEnd[3] = 0;
+		return stringEnd;
+		
+	}
+
 
 	public static String parenthCall(char c){
 		if( c ==  '(')
