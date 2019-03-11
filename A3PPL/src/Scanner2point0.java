@@ -11,9 +11,6 @@ public class Scanner2point0 {
 			String line = sc.nextLine();
 			linedArray.add(line);
 		}
-
-		
-	
 	}
 	
 	public static ArrayList <ArrayList<String>> makeTokens(ArrayList<String> input){
@@ -24,6 +21,8 @@ public class Scanner2point0 {
 			int tokeCount = 0;
 			int posiCharacter = 1;
 			for(int currCharacter = 0; currCharacter < input.get(line).length(); posiCharacter++, currCharacter++){
+				
+				
 				if( input.get(line).charAt(currCharacter) ==  '(' ||
 					input.get(line).charAt(currCharacter) ==  ')' ||
 					input.get(line).charAt(currCharacter) ==  '[' ||
@@ -38,7 +37,8 @@ public class Scanner2point0 {
 						
 						tempToken.add(identToken(token));
 						tempToken.add(Integer.toString(line));
-						tempToken.add(Integer.toString(posiCharacter));
+						tempToken.add(Integer.toString(posiCharacter - token.length()));
+						tokens.add(tempToken);
 						tempToken.clear();
 					}
 					
@@ -49,7 +49,27 @@ public class Scanner2point0 {
 					tempToken.clear();
 				}
 				else if(input.get(line).charAt(currCharacter) == '"'){
-					//TODO 
+					int[] stringEnd = stringToken(line, currCharacter, posiCharacter, input);
+					
+					if (stringEnd[0] == 1) {
+						tempToken.add("STRING");
+						tempToken.add(Integer.toString(line));
+						tempToken.add(Integer.toString(posiCharacter));
+						tokens.add(tempToken);
+						tempToken.clear();
+						
+						line = stringEnd[1];
+						currCharacter = stringEnd[2];
+						posiCharacter = stringEnd[3];
+						
+					}
+					else {
+						tempToken.add("ERROR");
+						tempToken.add(Integer.toString(line));
+						tempToken.add(Integer.toString(posiCharacter));
+						tokens.add(tempToken);
+						tempToken.clear();
+					}
 				}
 				else if(input.get(line).charAt(currCharacter) == ' ' ){
 					if (toke[0] == '\0')
@@ -61,7 +81,8 @@ public class Scanner2point0 {
             
 						tempToken.add(identToken(token));
 						tempToken.add(Integer.toString(line));
-						tempToken.add(Integer.toString(posiCharacter));
+						tempToken.add(Integer.toString(posiCharacter - token.length()));
+						tokens.add(tempToken);
 						tempToken.clear();
 					}	
 				}
@@ -75,15 +96,20 @@ public class Scanner2point0 {
 						
 						tempToken.add(identToken(token));
 						tempToken.add(Integer.toString(line));
-						tempToken.add(Integer.toString(posiCharacter));
+						tempToken.add(Integer.toString(posiCharacter - token.length()));
+						tokens.add(tempToken);
 						tempToken.clear();
 						posiCharacter += 4;
-						
-						// TALK ABOUT POSICHARACTER
 					}
+				}
+				else if(input.get(line).charAt(currCharacter) == ';') {
+					break;
+					
+						
 				}
 				else{
 					toke[tokeCount] = input.get(line).charAt(currCharacter);
+					tokeCount++;
 				}
 			}
 		}	
@@ -204,12 +230,12 @@ public class Scanner2point0 {
 	public static String numberToken(String s) {
 		s.toLowerCase();
 		if(s.startsWith("0b")){
-			if(!isBi(s.substring(2, s.length())))
-				return "ERROR";
+			if(isBi(s.substring(2, s.length())))
+				return "NUMBER";
 		
 		}else if(s.startsWith("0x")){
-			if(!isHex(s.substring(2, s.length())))
-				return "ERROR";
+			if(isHex(s.substring(2, s.length())))
+				return "NUMBER";
 		
 		}else if(s.charAt(0) == '+' || s.charAt(0) == '-' || isNum(s.substring(0,1))){
 			if(s.charAt(0) != '+' && s.charAt(0) != '-'){
@@ -355,6 +381,28 @@ public class Scanner2point0 {
 			return "ERROR";
 		}
 		
+	}
+	
+	public static int[] stringToken(int line, int currCharacter, int posiCharacter, ArrayList<String> input) {
+		
+		int[] stringEnd = new int[4];
+		currCharacter++;
+		posiCharacter++;
+		
+		while(input.get(line).charAt(currCharacter) != '"')
+		{
+			if (input.get(line).charAt(currCharacter) == '\"')
+			{
+				stringEnd[0] = 1;
+				return stringEnd;
+			}
+			else if (input.get(line).substring(currCharacter, currCharacter + 2) != -1)
+			{
+				
+			}
+		}
+		
+		return stringEnd;
 	}
 
 	public static String parenthCall(char c){
