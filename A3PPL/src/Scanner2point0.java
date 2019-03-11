@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 public class Scanner2point0 {
-
+	
 	public static void main(String[] args) throws FileNotFoundException {
 		// TODO make sure we are actually converting the .scheme file to a string through 
 		File inputFile = new File("input.scheme");
@@ -31,9 +31,10 @@ public class Scanner2point0 {
 					input.get(line).charAt(currCharacter) ==  '{' ||
 					input.get(line).charAt(currCharacter) ==  '}') {
 					
-					if (! (toke[0] == '\0')) {
+					if (toke[0] != '\0') {
 						String token = new String(toke).trim().replaceAll(" ",  "");
 						Arrays.fill(toke, '\0');
+						tokeCount = 0;
 						
 						tempToken.add(identToken(token));
 						tempToken.add(Integer.toString(line));
@@ -56,24 +57,33 @@ public class Scanner2point0 {
 					else{
 						String token = new String(toke).trim().replaceAll(" ",  "");
 						Arrays.fill(toke, '\0');
+						tokeCount = 0;
+            
+						tempToken.add(identToken(token));
+						tempToken.add(Integer.toString(line));
+						tempToken.add(Integer.toString(posiCharacter));
+						tempToken.clear();
+					}	
+				}
+				else if(input.get(line).charAt(currCharacter) == '\t'){
+					if (toke[0] == '\0')
+						continue;
+					else{
+						String token = new String(toke).trim().replaceAll(" ",  "");
+						Arrays.fill(toke, '\0');
+						tokeCount = 0;
 						
 						tempToken.add(identToken(token));
 						tempToken.add(Integer.toString(line));
 						tempToken.add(Integer.toString(posiCharacter));
 						tempToken.clear();
+						posiCharacter += 4;
+						
+						// TALK ABOUT POSICHARACTER
 					}
-						
-						
-				}else if(input.get(line).charAt(currCharacter) == '\t'){
-					
-				}else{
-					String token = new String(toke).trim().replaceAll(" ",  "");
-					Arrays.fill(toke, '\0');
-					
-					tempToken.add(identToken(token));
-					tempToken.add(Integer.toString(line));
-					tempToken.add(Integer.toString(posiCharacter));
-					tempToken.clear();
+				}
+				else{
+					toke[tokeCount] = input.get(line).charAt(currCharacter);
 				}
 			}
 		}	
@@ -172,26 +182,7 @@ public class Scanner2point0 {
 			return "ERROR";
 		}
 	}
-	
-	private static String charToken(String s) {
-		
-		switch(s) {
-		case "#\\\\newline" :
-			return "CHAR";
-		case "#\\\\space" :
-			return "CHAR";
-		case "#\\\\tab" : 
-			return "CHAR";
-		case " " :
-			return "CHAR";
-		case "  " :
-			return "CHAR";
-		default :
-			return "ERROR";
-		}
-		
-	}
-
+  
 	private static String boolToken(String s) {
 		
 		switch(s.charAt(1)) {
@@ -321,6 +312,51 @@ public class Scanner2point0 {
 		}		
 		return true;	
 	}
+
+	private static String charToken(String s) {
+		
+		if(s.charAt(1) == '\\' && s.charAt(2) == '\\')
+			if (((s.length() == 4) &&
+					(s.charAt(3) != '\t') &&
+					(s.charAt(3) != '\n') &&
+					(s.charAt(3) != '\0')) ||
+					
+					((s.length() == 6) &&
+						((s.charAt(3) == '0') ||
+								(s.charAt(3) == '1') ||
+								(s.charAt(3) == '2') ||
+								(s.charAt(3) == '3')) &&
+						((s.charAt(4) == '0') ||
+								(s.charAt(4) == '1') ||
+								(s.charAt(4) == '2') ||
+								(s.charAt(4) == '3') ||
+								(s.charAt(4) == '4') ||
+								(s.charAt(4) == '5') ||
+								(s.charAt(4) == '6') ||
+								(s.charAt(4) == '7')) &&
+						((s.charAt(5) == '0') ||
+								(s.charAt(5) == '1') ||
+								(s.charAt(5) == '2') ||
+								(s.charAt(5) == '3') ||
+								(s.charAt(5) == '4') ||
+								(s.charAt(5) == '5') ||
+								(s.charAt(5) == '6') || 
+								(s.charAt(5) == '7'))))
+				return "CHAR";
+		
+		switch(s) {
+		case "#\\\\newline" :
+			return "CHAR";
+		case "#\\\\space" :
+			return "CHAR";
+		case "#\\\\tab" : 
+			return "CHAR";
+		default :
+			return "ERROR";
+		}
+		
+	}
+
 	public static String parenthCall(char c){
 		if( c ==  '(')
 			return "OPENRD";
