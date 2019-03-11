@@ -393,13 +393,59 @@ public class Scanner2point0 {
 		{
 			if (input.get(line).charAt(currCharacter) == '\"')
 			{
-				stringEnd[0] = 1;
+				stringEnd[0] = 0;
+				stringEnd[1] = 0;
+				stringEnd[2] = 0;
+				stringEnd[3] = 0;
 				return stringEnd;
 			}
-			else if (input.get(line).substring(currCharacter, currCharacter + 2) != -1)
-			{
-				
-			}
+			else if (input.get(line).charAt(currCharacter) == '\\')
+				if (! (input.get(line).length() < (currCharacter + 1)))
+				{
+					stringEnd[0] = 0;
+					stringEnd[1] = 0;
+					stringEnd[2] = 0;
+					stringEnd[3] = 0;
+					return stringEnd;
+				}
+				else if (!(input.get(line).charAt(currCharacter + 1) == 't') ||
+							!(input.get(line).charAt(currCharacter + 1) == 'n'))
+					if (! (input.get(line).length() < (currCharacter + 3)))
+					{
+						stringEnd[0] = 0;
+						stringEnd[1] = 0;
+						stringEnd[2] = 0;
+						stringEnd[3] = 0;
+						return stringEnd;
+					}
+					else if (! (((input.get(line).charAt(currCharacter + 1) == '0') ||
+								(input.get(line).charAt(currCharacter + 1) == '1') ||
+								(input.get(line).charAt(currCharacter + 1) == '2') ||
+								(input.get(line).charAt(currCharacter + 1) == '3')) &&
+									((input.get(line).charAt(currCharacter + 2) == 't') ||
+									(input.get(line).charAt(currCharacter + 2) == 't') ||
+									(input.get(line).charAt(currCharacter + 2) == 't') ||
+									(input.get(line).charAt(currCharacter + 2) == 't') ||
+									(input.get(line).charAt(currCharacter + 2) == 't') ||
+									(input.get(line).charAt(currCharacter + 2) == 't') ||
+									(input.get(line).charAt(currCharacter + 2) == 't') ||
+									(input.get(line).charAt(currCharacter + 2) == 't')) &&
+											((input.get(line).charAt(currCharacter + 3) == 't') ||
+											(input.get(line).charAt(currCharacter + 3) == 't') ||
+											(input.get(line).charAt(currCharacter + 3) == 't') ||
+											(input.get(line).charAt(currCharacter + 3) == 't') ||
+											(input.get(line).charAt(currCharacter + 3) == 't') ||
+											(input.get(line).charAt(currCharacter + 3) == 't') ||
+											(input.get(line).charAt(currCharacter + 3) == 't') ||
+											(input.get(line).charAt(currCharacter + 3) == 't') ||
+											(input.get(line).charAt(currCharacter + 3) == 't'))))
+					{
+						stringEnd[0] = 0;
+						stringEnd[1] = 0;
+						stringEnd[2] = 0;
+						stringEnd[3] = 0;
+						return stringEnd;
+					}
 		}
 		
 		return stringEnd;
