@@ -162,7 +162,8 @@ public class Scanner2point0 {
 				(s.charAt(0) != (';')) &&
 				(s.charAt(0) != ('\'')) &&
 				(s.charAt(0) != ('\"')) &&
-				(s.charAt(0) != ('#'))){
+				(s.charAt(0) != ('#')) &&
+				(s.charAt(0) != ('.'))){
 			for(int i = 1; i < s.length(); i++){
 				if((s.charAt(i) == ('[')) ||
 						(s.charAt(i) == (']')) ||
