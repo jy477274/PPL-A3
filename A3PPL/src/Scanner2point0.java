@@ -62,6 +62,7 @@ public class Scanner2point0 {
 						currCharacter = stringEnd[2];
 						posiCharacter = stringEnd[3];
 						
+						continue;
 					}
 					else {
 						tempToken.add("ERROR");
@@ -322,6 +323,7 @@ public class Scanner2point0 {
 		}		
 		return true;		
 	}
+	
 	public static Boolean isNum(String s){
 		for(int i = 0; i < s.length(); i++){
 			if(s.charAt(i) != '0' &&
@@ -389,28 +391,28 @@ public class Scanner2point0 {
 		currCharacter++;
 		posiCharacter++;
 		
-		while(input.get(line).charAt(currCharacter) != '"')
-		{
-			if (input.get(line).charAt(currCharacter) == '\"')
+		for(; line < input.size(); line++) {	
+			for(;currCharacter < input.get(line).length(); currCharacter++)
 			{
-				stringEnd[0] = 0;
-				stringEnd[1] = 0;
-				stringEnd[2] = 0;
-				stringEnd[3] = 0;
-				return stringEnd;
-			}
-			else if (input.get(line).charAt(currCharacter) == '\\')
-				if (! (input.get(line).length() < (currCharacter + 1)))
+				if (input.get(line).charAt(currCharacter) == '"')
 				{
-					stringEnd[0] = 0;
-					stringEnd[1] = 0;
-					stringEnd[2] = 0;
-					stringEnd[3] = 0;
+					stringEnd[0] = 1;
+					stringEnd[1] = line;
+					stringEnd[2] = currCharacter;
+					stringEnd[3] = posiCharacter;
 					return stringEnd;
 				}
-				else if (!(input.get(line).charAt(currCharacter + 1) == 't') ||
-							!(input.get(line).charAt(currCharacter + 1) == 'n'))
-					if (! (input.get(line).length() < (currCharacter + 3)))
+			
+				if (input.get(line).charAt(currCharacter) == '\"')
+				{
+					stringEnd[0] = 0; // ERROR CODE
+					stringEnd[1] = 0; // LINE
+					stringEnd[2] = 0; // currCharacter
+					stringEnd[3] = 0; // posiCharacter
+					return stringEnd;
+				}
+				else if (input.get(line).charAt(currCharacter) == '\\')
+					if (! (input.get(line).length() < (currCharacter + 1)))
 					{
 						stringEnd[0] = 0;
 						stringEnd[1] = 0;
@@ -418,38 +420,55 @@ public class Scanner2point0 {
 						stringEnd[3] = 0;
 						return stringEnd;
 					}
-					else if (! (((input.get(line).charAt(currCharacter + 1) == '0') ||
+					else if (!(input.get(line).charAt(currCharacter + 1) == 't') ||
+							!(input.get(line).charAt(currCharacter + 1) == 'n'))
+						if (! (input.get(line).length() < (currCharacter + 3)))
+						{
+							stringEnd[0] = 0;
+							stringEnd[1] = 0;
+							stringEnd[2] = 0;
+							stringEnd[3] = 0;
+							return stringEnd;
+						}
+						else if (! (((input.get(line).charAt(currCharacter + 1) == '0') ||
 								(input.get(line).charAt(currCharacter + 1) == '1') ||
 								(input.get(line).charAt(currCharacter + 1) == '2') ||
 								(input.get(line).charAt(currCharacter + 1) == '3')) &&
-									((input.get(line).charAt(currCharacter + 2) == 't') ||
-									(input.get(line).charAt(currCharacter + 2) == 't') ||
-									(input.get(line).charAt(currCharacter + 2) == 't') ||
-									(input.get(line).charAt(currCharacter + 2) == 't') ||
-									(input.get(line).charAt(currCharacter + 2) == 't') ||
-									(input.get(line).charAt(currCharacter + 2) == 't') ||
-									(input.get(line).charAt(currCharacter + 2) == 't') ||
-									(input.get(line).charAt(currCharacter + 2) == 't')) &&
-											((input.get(line).charAt(currCharacter + 3) == 't') ||
-											(input.get(line).charAt(currCharacter + 3) == 't') ||
-											(input.get(line).charAt(currCharacter + 3) == 't') ||
-											(input.get(line).charAt(currCharacter + 3) == 't') ||
-											(input.get(line).charAt(currCharacter + 3) == 't') ||
-											(input.get(line).charAt(currCharacter + 3) == 't') ||
-											(input.get(line).charAt(currCharacter + 3) == 't') ||
-											(input.get(line).charAt(currCharacter + 3) == 't') ||
-											(input.get(line).charAt(currCharacter + 3) == 't'))))
-					{
-						stringEnd[0] = 0;
-						stringEnd[1] = 0;
-						stringEnd[2] = 0;
-						stringEnd[3] = 0;
-						return stringEnd;
-					}
+								((input.get(line).charAt(currCharacter + 2) == 't') ||
+										(input.get(line).charAt(currCharacter + 2) == 't') ||
+										(input.get(line).charAt(currCharacter + 2) == 't') ||
+										(input.get(line).charAt(currCharacter + 2) == 't') ||
+										(input.get(line).charAt(currCharacter + 2) == 't') ||
+										(input.get(line).charAt(currCharacter + 2) == 't') ||
+										(input.get(line).charAt(currCharacter + 2) == 't') ||
+										(input.get(line).charAt(currCharacter + 2) == 't')) &&
+								((input.get(line).charAt(currCharacter + 3) == 't') ||
+										(input.get(line).charAt(currCharacter + 3) == 't') ||
+										(input.get(line).charAt(currCharacter + 3) == 't') ||
+										(input.get(line).charAt(currCharacter + 3) == 't') ||
+										(input.get(line).charAt(currCharacter + 3) == 't') ||
+										(input.get(line).charAt(currCharacter + 3) == 't') ||
+										(input.get(line).charAt(currCharacter + 3) == 't') ||
+										(input.get(line).charAt(currCharacter + 3) == 't') ||
+										(input.get(line).charAt(currCharacter + 3) == 't'))))
+						{
+							stringEnd[0] = 0;
+							stringEnd[1] = 0;
+							stringEnd[2] = 0;
+							stringEnd[3] = 0;
+							return stringEnd;
+						}
+			}
 		}
 		
+		stringEnd[0] = 0;
+		stringEnd[1] = 0;
+		stringEnd[2] = 0;
+		stringEnd[3] = 0;
 		return stringEnd;
+		
 	}
+
 
 	public static String parenthCall(char c){
 		if( c ==  '(')
