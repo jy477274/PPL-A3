@@ -11,13 +11,9 @@ public class Scanner2point0 {
 			String line = sc.nextLine();
 			linedArray.add(line);
 		}
-
-		ArrayList <ArrayList<String>> results = new ArrayList<ArrayList<String>> (makeTokens(linedArray));
-		for(int i = 0; i < results.size(); i ++){
-			for(int j = 0; j < results.get(i).size(); j ++){
-			System.out.println(results.get(i).get(j));
-			}
-		}
+		makeTokens(linedArray);
+		
+		
 
 	}
 	
@@ -44,16 +40,18 @@ public class Scanner2point0 {
 						tokeCount = 0;
 						
 						tempToken.add(identToken(token));
-						tempToken.add(Integer.toString(line));
+						tempToken.add(Integer.toString(line + 1));
 						tempToken.add(Integer.toString(posiCharacter - token.length()));
 						tokens.add(tempToken);
+						System.out.println(tempToken);
 						tempToken.clear();
 					}
 					
 					tempToken.add(parenthCall(input.get(line).charAt(currCharacter)));
-					tempToken.add(Integer.toString(line));
+					tempToken.add(Integer.toString(line + 1));
 					tempToken.add(Integer.toString(posiCharacter));
 					tokens.add(tempToken);
+					System.out.println(tempToken);
 					tempToken.clear();
 				}
 				else if(input.get(line).charAt(currCharacter) == '"'){
@@ -61,9 +59,10 @@ public class Scanner2point0 {
 					
 					if (stringEnd[0] == 1) {
 						tempToken.add("STRING");
-						tempToken.add(Integer.toString(line));
+						tempToken.add(Integer.toString(line + 1));
 						tempToken.add(Integer.toString(posiCharacter));
 						tokens.add(tempToken);
+						System.out.println(tempToken);
 						tempToken.clear();
 						
 						line = stringEnd[1];
@@ -74,9 +73,10 @@ public class Scanner2point0 {
 					}
 					else {
 						tempToken.add("ERROR");
-						tempToken.add(Integer.toString(line));
+						tempToken.add(Integer.toString(line + 1));
 						tempToken.add(Integer.toString(posiCharacter));
 						tokens.add(tempToken);
+						System.out.println(tempToken);
 						tempToken.clear();
 					}
 				}
@@ -89,9 +89,10 @@ public class Scanner2point0 {
 						tokeCount = 0;
             
 						tempToken.add(identToken(token));
-						tempToken.add(Integer.toString(line));
+						tempToken.add(Integer.toString(line + 1));
 						tempToken.add(Integer.toString(posiCharacter - token.length()));
 						tokens.add(tempToken);
+						System.out.println(tempToken);
 						tempToken.clear();
 					}	
 				}
@@ -104,9 +105,10 @@ public class Scanner2point0 {
 						tokeCount = 0;
 						
 						tempToken.add(identToken(token));
-						tempToken.add(Integer.toString(line));
+						tempToken.add(Integer.toString(line + 1));
 						tempToken.add(Integer.toString(posiCharacter - token.length()));
 						tokens.add(tempToken);
+						System.out.println(tempToken);
 						tempToken.clear();
 						posiCharacter += 4;
 					}
