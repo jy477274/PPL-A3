@@ -12,8 +12,12 @@ public class Scanner2point0 {
 			linedArray.add(line);
 		}
 
-		ArrayList <ArrayList<String>> results = makeTokens(linedArray);
-		results.toString();
+		ArrayList <ArrayList<String>> results = new ArrayList<ArrayList<String>> (makeTokens(linedArray));
+		for(int i = 0; i < results.size(); i ++){
+			for(int j = 0; j < results.get(i).size(); j ++){
+			System.out.println(results.get(i).get(j));
+			}
+		}
 
 	}
 	
