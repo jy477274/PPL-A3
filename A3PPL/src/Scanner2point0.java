@@ -6,11 +6,15 @@ public class Scanner2point0 {
 		// TODO make sure we are actually converting the .scheme file to a string through 
 		File inputFile = new File("input.scheme");
 		Scanner sc = new Scanner(inputFile);
+		
+		//READ THE OUTPUT INTO AN ARRAYLIST OF STRINGS WHERE EACH STRING IS A LINE
 		ArrayList<String> linedArray = new ArrayList<String>(); 
 		while(sc.hasNextLine()){
 			String line = sc.nextLine();
 			linedArray.add(line);
 		}
+		
+		//PASS THE ARRAY OF LINES INTO THE SCANNER TO BE SCANNED
 		makeTokens(linedArray);
 		
 		
@@ -19,14 +23,22 @@ public class Scanner2point0 {
 	
 	public static ArrayList <ArrayList<String>> makeTokens(ArrayList<String> input){
 		ArrayList <ArrayList<String>> tokens = new ArrayList <ArrayList <String>>();
+		
+		// FOR EVERY LINE IN THE ARRAY OF STRINGS, CHECK THE INITIAL ELEMENTS TO SEE WHICH TYPE OF
+		// TOKEN THAT THE SUBSTRINGS MIGHT REPRESENT
 		for(int line = 0; line < input.size(); line++){
 			ArrayList<String> tempToken = new ArrayList <String>();
+			
+			// INITIALIZES A CHAR ARRAY TO STORE PIECES OF TOKENS IN,
+			// A COUNTER TO TRACK THE SIZE OF THE TOKEN, AND A POSICHARACTER
+			// THAT TRACKS THE CHARACTER'S POSITION ON THE LINE, WHICH DIFFERES
+			// POSITION OF THE CHARACTER RELATIVE TO OTHERS
 			char[] toke = new char[100] ;
 			int tokeCount = 0;
 			int posiCharacter = 1;
 			for(int currCharacter = 0; currCharacter < input.get(line).length(); posiCharacter++, currCharacter++){
 				
-				
+				// IF THE FIRST ELEMENT OF THE POTENTIAL TOKEN IS A PARENTHESIS
 				if( input.get(line).charAt(currCharacter) ==  '(' ||
 					input.get(line).charAt(currCharacter) ==  ')' ||
 					input.get(line).charAt(currCharacter) ==  '[' ||
@@ -34,8 +46,12 @@ public class Scanner2point0 {
 					input.get(line).charAt(currCharacter) ==  '{' ||
 					input.get(line).charAt(currCharacter) ==  '}') {
 					
+					// IF THE TOKEN WE'VE BEEN BUILDING IS NOT CURRENTLY EMPTY
 					if (toke[0] != '\0') {
 						
+						
+						// CREATE A STRING OUT OF THE TOKEN PIECES THAT REPRESENTS THE TOKEN,
+						// THEN OUTPUT THIS TOKEN ALONG WITH THE LINE AND SPACE THAT THE TOKEN STARTS ON
 						String token = new String(toke).trim().replaceAll(" ",  "");
 						Arrays.fill(toke, '\0');
 						tokeCount = 0;
@@ -48,6 +64,8 @@ public class Scanner2point0 {
 						tempToken.clear();
 					}
 					
+					// AFTERWARDS, CREAT A PARENTHESIS TOKEN BY CALLING THE METHOD THAT DETERMINES
+					// THE TYPE OF PARENTHESIS USED, THEN PRINT IT ALONG WITH ITS LINE AND LOCATION
 					tempToken.add(parenthCall(input.get(line).charAt(currCharacter)));
 					tempToken.add(Integer.toString(line + 1));
 					tempToken.add(Integer.toString(posiCharacter));
@@ -55,12 +73,19 @@ public class Scanner2point0 {
 					System.out.println(tempToken);
 					tempToken.clear();
 				}
+				
+				// IF THE NEXT TOKEN IS BEGINNING AS A STRING
 				else if(input.get(line).charAt(currCharacter) == '"'){
 					
+					// KEEP TRACK OF WHERE THE STRING STARTED AND THEN PASS IT TO THE STRING
+					// DECIPHERING METHOD TO DETERMINE WHERE THE STRING STOPS SO WE CAN RESUME
+					// SCANNING AT THAT POINT
 					int[] stringEnd = stringToken(line, currCharacter, posiCharacter, input);
 					for(int k = 0; k < 4; k++)
 						System.out.println(stringEnd[k]);
 					
+					// IF THE STRING WAS FREE OF ERRORS, DISPLAY THE TOKEN TYPE
+					// AS WELL AS ITS STARTING LINE AND LOCATION
 					if (stringEnd[0] == 1) {
 						tempToken.add("STRING");
 						tempToken.add(Integer.toString(line + 1));
@@ -69,6 +94,8 @@ public class Scanner2point0 {
 						System.out.println(tempToken);
 						tempToken.clear();
 						
+						
+						// RESUME WHERE THE STRING ENDED
 						line = stringEnd[1];
 						currCharacter = stringEnd[2];
 						posiCharacter = stringEnd[3];
@@ -76,19 +103,26 @@ public class Scanner2point0 {
 						continue;
 					}
 					else {
+						
+						// IF THE STRING WAS FOUND TO BE AN ERROR, PRINT THIS AND ITS LOCATION, ETC.
 						tempToken.add("ERROR");
 						tempToken.add(Integer.toString(line + 1));
 						tempToken.add(Integer.toString(posiCharacter));
 						tokens.add(tempToken);
-						System.out.println(tempToken);
+						System.out.println("LEXICAL ERROR [" + (line + 1) + ":" + posiCharacter + "]: Invalid token");
 						tempToken.clear();
 					}
 				}
+				
+				// IF THE NEXT CHARACTER IS A SPACE
 				else if(input.get(line).charAt(currCharacter) == ' '){
 					
 					if (toke[0] == '\0')
 						continue;
 					else{
+						
+						// BUILD ANY TOKEN THAT WE'VE BEEN GATHERING AND DISPLAY IT WITH
+						// ITS INFO
 						String token = new String(toke).trim().replaceAll(" ",  "");
 						Arrays.fill(toke, '\0');
 						tokeCount = 0;
@@ -101,14 +135,19 @@ public class Scanner2point0 {
 						tempToken.clear();
 					}	
 				}
+				
+				// IF THE NEXT CHARACTER IS A TAB
 				else if(input.get(line).charAt(currCharacter) == '\t'){
 					
+					//INCREMENT POSICHARACTER TO ACCOUNT FOR THE 4 SPACES OF THE TAB
 					if (toke[0] == '\0')
 					{
 						posiCharacter += 3;
 						continue;
 					}
 					else{
+						
+						// BUILD ANY TOKEN THAT WE'VE BEEN WORKING ON AND DISPLAY ITS INFO
 						String token = new String(toke).trim().replaceAll(" ",  "");
 						Arrays.fill(toke, '\0');
 						tokeCount = 0;
@@ -122,10 +161,14 @@ public class Scanner2point0 {
 						posiCharacter += 3;
 					}
 				}
+				
+				// IF THE LINE BEGINS A COMMENT, BREAK TO THE NEXT LINE
 				else if(input.get(line).charAt(currCharacter) == ';') {
 					break;	
 				}
 				else{
+					
+					// OTHERWISE SIMPLY BUILD THE TOKEN WE'VE BEEN WORKING ON AND DISPLAY IT ALONG WITH ITS INFO
 					toke[tokeCount] = input.get(line).charAt(currCharacter);
 					tokeCount++;
 					if (tokeCount == input.get(line).length() - 2)

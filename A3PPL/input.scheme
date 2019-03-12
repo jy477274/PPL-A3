@@ -6,5 +6,4 @@
 		cur
 		(fib cur (+ prev cur) (+ i 1)))))
 	"Toast me butt"
-	"Ghost
-	mkuggckyugcuycu"
+	"Ghost" TOAST"
