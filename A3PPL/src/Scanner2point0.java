@@ -147,7 +147,7 @@ public class Scanner2point0 {
 		return tokens; 
 	}
 	
-	public static String identToken(String s){
+	public static String identToken(String s){//ident token first checks for all keywords
 		switch(s){
 		case "lambda" :
 			return "LAMBDA";
@@ -167,7 +167,7 @@ public class Scanner2point0 {
 			break;
 		}
 		
-		if((s.charAt(0) != ('[')) &&
+		if((s.charAt(0) != ('[')) &&// then we check for identifiers, stating all the chars it cannot start with and then all the chars it cannot be later in the string
 				(s.charAt(0) != (']')) &&
 				(s.charAt(0) != ('(')) &&
 				(s.charAt(0) != (')')) &&
@@ -206,10 +206,10 @@ public class Scanner2point0 {
 			}
 			return "IDENTIFIER";
 		}
-		else if((s.length() == 1) && (s.charAt(0) == '\''))
+		else if((s.length() == 1) && (s.charAt(0) == '\''))//hard coded value for the quote mark 
 			return "QUOTMK";
 		
-		switch(s.charAt(0)){
+		switch(s.charAt(0)){//we chec all possible starter values for ints, and if they are met we send it into a numberToken method that checks all the different types of NUMBERS
 		case '+' :
 			return numberToken(s);
 		case '-' :
@@ -247,7 +247,7 @@ public class Scanner2point0 {
 		
 	}
   
-	private static String boolToken(String s) {
+	private static String boolToken(String s) {// very simple method checkcing if the 2ed char is t or false we return BOOL
 		
 		switch(s.charAt(1)) {
 		case 't' :
@@ -267,11 +267,11 @@ public class Scanner2point0 {
 
 	public static String numberToken(String startingString) {
 		String s = startingString.toLowerCase();
-		if(s.startsWith("0b")){
+		if(s.startsWith("0b")){//just calls the bi method
 			if(isBi(s.substring(2, s.length())))
 				return "NUMBER";
 		
-		}else if(s.startsWith("0x")){
+		}else if(s.startsWith("0x")){//calls the hex method since know the first two digits conferm it is a hex  (or should be)
 			if(isHex(s.substring(2, s.length())))
 				return "NUMBER";
 		
@@ -310,9 +310,9 @@ public class Scanner2point0 {
 		return false;
 	}
 
-	private static boolean isExponent(String s) {
+	private static boolean isExponent(String s) {//is exponent makes sure that the first char is an 'e', we have tolowercase for 'E' before here, 
 		if(s.charAt(0) == 'e'){
-			if((s.charAt(1) == '+' || s.charAt(1) == '-')){
+			if((s.charAt(1) == '+' || s.charAt(1) == '-')){//two options if there is a = or - we go from an incremented pos to check if the rest is a num
 				if(isNum(s.substring(2)));
 					return true;
 			}else{
@@ -323,8 +323,8 @@ public class Scanner2point0 {
 		return false;
 	}
 
-	public static boolean isFloatPoint(String s) {
-		int pValue = s.indexOf('.');
+	public static boolean isFloatPoint(String s) {//we mark the vals of . and e, since we know this type of float has to have a '.' we we check that the first part is either just a . or from 0 to the . is a number
+		int pValue = s.indexOf('.');// then from the . to the end of the string we check if it is an exponent using another helper funct
 		int eValue = s.indexOf('e');
 		if(pValue == -1)
 			return false;
@@ -342,7 +342,7 @@ public class Scanner2point0 {
 		return false;
 	}
 
-	public static Boolean isBi(String s){
+	public static Boolean isBi(String s){//checks that the string only contains 1s and 0s
 		for(int i = 0; i < s.length(); i++){
 			if(s.charAt(i) != '0' && s.charAt(i) != '1'){
 				return false;
@@ -351,7 +351,7 @@ public class Scanner2point0 {
 		return true;
 	}
 	
-	public static Boolean isHex(String s){
+	public static Boolean isHex(String s){//checks that the string only contains all possible hex vals
 		for(int i = 0; i < s.length(); i++){
 			if(s.charAt(i) != '0' &&
 				s.charAt(i) != '1' &&
@@ -381,7 +381,7 @@ public class Scanner2point0 {
 		return true;		
 	}
 	
-	public static Boolean isNum(String s){
+	public static Boolean isNum(String s){//nice little method that was used a lot, checks that all chars in a string are numbers
 		for(int i = 0; i < s.length(); i++){
 			if(s.charAt(i) != '0' &&
 				s.charAt(i) != '1' &&
@@ -398,7 +398,7 @@ public class Scanner2point0 {
 		return true;	
 	}
 
-	private static String charToken(String s) {
+	private static String charToken(String s) {// we know that the first 5 chars are #\\\\ if the length is four and the last char is not \5 \n \0 we know it is any char, we also look at strings length 6 and check all possible ansrs
 		
 		if(s.charAt(1) == '\\' && s.charAt(2) == '\\')
 			if (((s.length() == 4) &&
@@ -429,7 +429,7 @@ public class Scanner2point0 {
 								(s.charAt(5) == '7'))))
 				return "CHAR";
 		
-		switch(s) {
+		switch(s) {//hard coded values
 		case "#\\\\newline" :
 			return "CHAR";
 		case "#\\\\space" :
@@ -532,7 +532,7 @@ public class Scanner2point0 {
 	}
 
 
-	public static String parenthCall(char c){
+	public static String parenthCall(char c){// parenthCall checks what type of parenth it is and then returns a string based on the char
 		if( c ==  '(')
 			return "OPENRD";
 		else if(c ==  ')' )
