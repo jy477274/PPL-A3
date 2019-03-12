@@ -35,6 +35,7 @@ public class Scanner2point0 {
 					input.get(line).charAt(currCharacter) ==  '}') {
 					
 					if (toke[0] != '\0') {
+						
 						String token = new String(toke).trim().replaceAll(" ",  "");
 						Arrays.fill(toke, '\0');
 						tokeCount = 0;
@@ -55,7 +56,10 @@ public class Scanner2point0 {
 					tempToken.clear();
 				}
 				else if(input.get(line).charAt(currCharacter) == '"'){
+					
 					int[] stringEnd = stringToken(line, currCharacter, posiCharacter, input);
+					for(int k = 0; k < 4; k++)
+						System.out.println(stringEnd[k]);
 					
 					if (stringEnd[0] == 1) {
 						tempToken.add("STRING");
@@ -80,7 +84,8 @@ public class Scanner2point0 {
 						tempToken.clear();
 					}
 				}
-				else if(input.get(line).charAt(currCharacter) == ' ' ){
+				else if(input.get(line).charAt(currCharacter) == ' '){
+					
 					if (toke[0] == '\0')
 						continue;
 					else{
@@ -97,8 +102,12 @@ public class Scanner2point0 {
 					}	
 				}
 				else if(input.get(line).charAt(currCharacter) == '\t'){
+					
 					if (toke[0] == '\0')
+					{
+						posiCharacter += 3;
 						continue;
+					}
 					else{
 						String token = new String(toke).trim().replaceAll(" ",  "");
 						Arrays.fill(toke, '\0');
@@ -110,17 +119,28 @@ public class Scanner2point0 {
 						tokens.add(tempToken);
 						System.out.println(tempToken);
 						tempToken.clear();
-						posiCharacter += 4;
+						posiCharacter += 3;
 					}
 				}
 				else if(input.get(line).charAt(currCharacter) == ';') {
-					break;
-					
-						
+					break;	
 				}
 				else{
 					toke[tokeCount] = input.get(line).charAt(currCharacter);
 					tokeCount++;
+					if (tokeCount == input.get(line).length() - 2)
+					{
+						String token = new String(toke).trim().replaceAll(" ",  "");
+						Arrays.fill(toke, '\0');
+						tokeCount = 0;
+						
+						tempToken.add(identToken(token));
+						tempToken.add(Integer.toString(line + 1));
+						tempToken.add(Integer.toString(posiCharacter - token.length() + 1));
+						tokens.add(tempToken);
+						System.out.println(tempToken);
+						tempToken.clear();
+					}
 				}
 			}
 		}	
@@ -428,8 +448,13 @@ public class Scanner2point0 {
 		currCharacter++;
 		posiCharacter++;
 		
+		System.out.println(line);
+		System.out.println(currCharacter);
+		System.out.println(posiCharacter);
+		System.out.println("-------------");
+		
 		for(; line < input.size(); line++) {	
-			for(;currCharacter < input.get(line).length(); currCharacter++)
+			for(;currCharacter < input.get(line).length(); currCharacter++, posiCharacter++)
 			{
 				if (input.get(line).charAt(currCharacter) == '"')
 				{
@@ -439,7 +464,7 @@ public class Scanner2point0 {
 					stringEnd[3] = posiCharacter;
 					return stringEnd;
 				}
-			
+				
 				if (input.get(line).charAt(currCharacter) == '\"')
 				{
 					stringEnd[0] = 0; // ERROR CODE
