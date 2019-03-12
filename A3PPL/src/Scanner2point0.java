@@ -162,13 +162,8 @@ public class Scanner2point0 {
 				(s.charAt(0) != (';')) &&
 				(s.charAt(0) != ('\'')) &&
 				(s.charAt(0) != ('\"')) &&
-<<<<<<< HEAD
 				(s.charAt(0) != ('#')) &&
 				(s.charAt(0) != ('.'))){
-=======
-				(s.charAt(0) != ('.')) &&
-				(s.charAt(0) != ('#'))){
->>>>>>> baa122d61df6119f8ffac44faa24fb5236808c09
 			for(int i = 1; i < s.length(); i++){
 				if((s.charAt(i) == ('[')) ||
 						(s.charAt(i) == (']')) ||
@@ -211,8 +206,7 @@ public class Scanner2point0 {
 			return numberToken(s);
 		case '8' :
 			return numberToken(s);
-		case '.' :
-			return numberToken(s);
+
 		case '9' :
 			return numberToken(s);
 		case '#' :
@@ -244,8 +238,7 @@ public class Scanner2point0 {
 		}
 	}
 
-	public static String numberToken(String startingString) {
-		String s = startingString.toLowerCase();
+	public static String numberToken(String s) {
 		if(s.startsWith("0b")){
 			if(isBi(s.substring(2, s.length())))
 				return "NUMBER";
@@ -254,7 +247,8 @@ public class Scanner2point0 {
 			if(isHex(s.substring(2, s.length())))
 				return "NUMBER";
 		
-		}else if(s.charAt(0) == '+' || s.charAt(0) == '-' || s.charAt(0) == '.' || isNum(s.substring(0,1))){
+		}else if(s.charAt(0) == '+' || s.charAt(0) == '-' || isNum(s.substring(0,1))){
+			s.toLowerCase();
 			if(s.charAt(0) != '+' && s.charAt(0) != '-'){
 				if(isNum(s))// if s is a decimal signed integer we know it is a number
 					return "NUMBER";
@@ -282,7 +276,7 @@ public class Scanner2point0 {
 		int eValue = s.indexOf('e');
 		if(eValue == -1)
 			return false;
-		else if(isNum(s.substring(0, eValue)) && isExponent(s.substring((eValue)))){
+		if(isNum(s.substring(0, s.charAt(eValue))) && isExponent(s.substring((eValue), s.length()))){
 			return true;
 		}
 		
